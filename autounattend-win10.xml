@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<unattend xmlns="urn:schemas-microsoft-com:unattend"
+          xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+  <settings pass="specialize">
+    <component name="Microsoft-Windows-Shell-Setup"
+               processorArchitecture="amd64"
+               publicKeyToken="31bf3856ad364e35"
+               language="neutral"
+               versionScope="nonSxS">
+      <ComputerName>*</ComputerName>
+      <TimeZone>E. South America Standard Time</TimeZone>
+      <RegisteredOwner>Pichau</RegisteredOwner>
+      <RegisteredOrganization>Pichau</RegisteredOrganization>
+    </component>
+
+    <component name="Microsoft-Windows-Deployment"
+               processorArchitecture="amd64"
+               publicKeyToken="31bf3856ad364e35"
+               language="neutral"
+               versionScope="nonSxS">
+      <RunSynchronous>
+        <RunSynchronousCommand wcm:action="add">
+          <Order>1</Order>
+          <Path>cmd /c reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE" /v DisablePrivacyExperience /t REG_DWORD /d 1 /f</Path>
+        </RunSynchronousCommand>
+        <RunSynchronousCommand wcm:action="add">
+          <Order>2</Order>
+          <Path>cmd /c reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v EnableFirstLogonAnimation /t REG_DWORD /d 0 /f</Path>
+        </RunSynchronousCommand>
+        <RunSynchronousCommand wcm:action="add">
+          <Order>3</Order>
+          <Path>cmd /c reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v DisableWindowsConsumerFeatures /t REG_DWORD /d 1 /f</Path>
+        </RunSynchronousCommand>
+      </RunSynchronous>
+    </component>
+  </settings>
+
+  <settings pass="oobeSystem">
+    <component name="Microsoft-Windows-International-Core"
+               processorArchitecture="amd64"
+               publicKeyToken="31bf3856ad364e35"
+               language="neutral"
+               versionScope="nonSxS">
+      <InputLocale>0416:00010416</InputLocale>
+      <SystemLocale>pt-BR</SystemLocale>
+      <UILanguage>pt-BR</UILanguage>
+      <UserLocale>pt-BR</UserLocale>
+    </component>
+
+    <component name="Microsoft-Windows-Shell-Setup"
+               processorArchitecture="amd64"
+               publicKeyToken="31bf3856ad364e35"
+               language="neutral"
+               versionScope="nonSxS">
+
+      <OOBE>
+        <HideEULAPage>true</HideEULAPage>
+        <HideOnlineAccountScreens>true</HideOnlineAccountScreens>
+        <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
+        <HideOEMRegistrationScreen>true</HideOEMRegistrationScreen>
+        <NetworkLocation>Work</NetworkLocation>
+        <ProtectYourPC>3</ProtectYourPC>
+      </OOBE>
+
+      <UserAccounts>
+        <LocalAccounts>
+          <LocalAccount wcm:action="add">
+            <Name>Pichau</Name>
+            <DisplayName>Pichau</DisplayName>
+            <Description>Pichau</Description>
+            <Group>Administrators</Group>
+            <Password>
+              <Value></Value>
+              <PlainText>true</PlainText>
+            </Password>
+          </LocalAccount>
+        </LocalAccounts>
+      </UserAccounts>
+
+      <AutoLogon>
+        <Enabled>true</Enabled>
+        <Username>Pichau</Username>
+        <LogonCount>999</LogonCount>
+        <Password>
+          <Value></Value>
+          <PlainText>true</PlainText>
+        </Password>
+      </AutoLogon>
+
+      <FirstLogonCommands>
+        <SynchronousCommand wcm:action="add">
+          <Order>1</Order>
+          <CommandLine>cmd /c reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v AutoAdminLogon /t REG_SZ /d 1 /f</CommandLine>
+          <Description>AutoLogon</Description>
+        </SynchronousCommand>
+      </FirstLogonCommands>
+
+    </component>
+  </settings>
+
+</unattend>
