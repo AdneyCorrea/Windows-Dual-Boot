@@ -173,42 +173,48 @@ function Apply-InstalledBranding {
         $wallpaperSource = Join-Path $scriptDir 'wallpaper.jpg'
         $lockscreenSource = Join-Path $scriptDir 'lockscreen.jpg'
 
-        $targetDir = "$WindowsDrive\Windows\Web\Custom"
-        $wallpaperTarget = Join-Path $targetDir 'wallpaper.jpg'
-        $lockscreenTarget = Join-Path $targetDir 'lockscreen.jpg'
+        $customDir = "$WindowsDrive\Windows\Web\Custom"
+        $wallpaperTarget = Join-Path $customDir 'wallpaper.jpg'
+        $lockscreenTarget = Join-Path $customDir 'lockscreen.jpg'
 
-        New-Item -Path $targetDir -ItemType Directory -Force | Out-Null
+        $systemWallpaperDir = "$WindowsDrive\Windows\Web\Wallpaper\Windows"
+        $systemWallpaperTarget = Join-Path $systemWallpaperDir 'img0.jpg'
+        $system4kWallpaperDir = "$WindowsDrive\Windows\Web\4K\Wallpaper\Windows"
+        $systemScreenDir = "$WindowsDrive\Windows\Web\Screen"
+
+        New-Item -Path $customDir -ItemType Directory -Force | Out-Null
 
         if (Test-Path $wallpaperSource) {
             Copy-Item $wallpaperSource $wallpaperTarget -Force
+            New-Item -Path $systemWallpaperDir -ItemType Directory -Force | Out-Null
+            Copy-Item $wallpaperSource $systemWallpaperTarget -Force
+
+            if (Test-Path $system4kWallpaperDir) {
+                Get-ChildItem -Path $system4kWallpaperDir -Filter '*.jpg' -ErrorAction SilentlyContinue | ForEach-Object {
+                    Copy-Item $wallpaperSource $_.FullName -Force -ErrorAction SilentlyContinue
+                }
+            }
         }
 
         if (Test-Path $lockscreenSource) {
             Copy-Item $lockscreenSource $lockscreenTarget -Force
+            if (Test-Path $systemScreenDir) {
+                Get-ChildItem -Path $systemScreenDir -Filter '*.jpg' -ErrorAction SilentlyContinue | ForEach-Object {
+                    Copy-Item $lockscreenSource $_.FullName -Force -ErrorAction SilentlyContinue
+                }
+            }
         }
 
         $softwareHive = "$WindowsDrive\Windows\System32\config\SOFTWARE"
         if (Test-Path $softwareHive) {
             reg load HKLM\OFFSOFT $softwareHive | Out-Null
 
-            reg add "HKLM\OFFSOFT\Microsoft\Windows\CurrentVersion\PersonalizationCSP" /f | Out-Null
-            reg add "HKLM\OFFSOFT\Policies\Microsoft\Windows\Personalization" /f | Out-Null
-            reg add "HKLM\OFFSOFT\Microsoft\Windows\CurrentVersion\Policies\System" /f | Out-Null
-
-            if (Test-Path $wallpaperTarget) {
-                reg add "HKLM\OFFSOFT\Microsoft\Windows\CurrentVersion\PersonalizationCSP" /v DesktopImageStatus /t REG_DWORD /d 1 /f | Out-Null
-                reg add "HKLM\OFFSOFT\Microsoft\Windows\CurrentVersion\PersonalizationCSP" /v DesktopImagePath /t REG_SZ /d "C:\Windows\Web\Custom\wallpaper.jpg" /f | Out-Null
-                reg add "HKLM\OFFSOFT\Microsoft\Windows\CurrentVersion\PersonalizationCSP" /v DesktopImageUrl /t REG_SZ /d "C:\Windows\Web\Custom\wallpaper.jpg" /f | Out-Null
-                reg add "HKLM\OFFSOFT\Microsoft\Windows\CurrentVersion\Policies\System" /v Wallpaper /t REG_SZ /d "C:\Windows\Web\Custom\wallpaper.jpg" /f | Out-Null
-                reg add "HKLM\OFFSOFT\Microsoft\Windows\CurrentVersion\Policies\System" /v WallpaperStyle /t REG_SZ /d 10 /f | Out-Null
-            }
-
-            if (Test-Path $lockscreenTarget) {
-                reg add "HKLM\OFFSOFT\Microsoft\Windows\CurrentVersion\PersonalizationCSP" /v LockScreenImageStatus /t REG_DWORD /d 1 /f | Out-Null
-                reg add "HKLM\OFFSOFT\Microsoft\Windows\CurrentVersion\PersonalizationCSP" /v LockScreenImagePath /t REG_SZ /d "C:\Windows\Web\Custom\lockscreen.jpg" /f | Out-Null
-                reg add "HKLM\OFFSOFT\Microsoft\Windows\CurrentVersion\PersonalizationCSP" /v LockScreenImageUrl /t REG_SZ /d "C:\Windows\Web\Custom\lockscreen.jpg" /f | Out-Null
-                reg add "HKLM\OFFSOFT\Policies\Microsoft\Windows\Personalization" /v LockScreenImage /t REG_SZ /d "C:\Windows\Web\Custom\lockscreen.jpg" /f | Out-Null
-            }
+            reg delete "HKLM\OFFSOFT\Microsoft\Windows\CurrentVersion\Policies\ActiveDesktop" /v NoChangingWallPaper /f | Out-Null 2>&1
+            reg delete "HKLM\OFFSOFT\Microsoft\Windows\CurrentVersion\Policies\System" /v Wallpaper /f | Out-Null 2>&1
+            reg delete "HKLM\OFFSOFT\Microsoft\Windows\CurrentVersion\Policies\System" /v WallpaperStyle /f | Out-Null 2>&1
+            reg delete "HKLM\OFFSOFT\Policies\Microsoft\Windows\Personalization" /v LockScreenImage /f | Out-Null 2>&1
+            reg delete "HKLM\OFFSOFT\Policies\Microsoft\Windows\Personalization" /v NoChangingLockScreen /f | Out-Null 2>&1
+            reg delete "HKLM\OFFSOFT\Microsoft\Windows\CurrentVersion\PersonalizationCSP" /f | Out-Null 2>&1
 
             reg unload HKLM\OFFSOFT | Out-Null
         }
@@ -216,15 +222,24 @@ function Apply-InstalledBranding {
         $defaultUserHive = "$WindowsDrive\Users\Default\NTUSER.DAT"
         if (Test-Path $defaultUserHive) {
             reg load HKU\DEFUSER $defaultUserHive | Out-Null
+
+            reg delete "HKU\DEFUSER\Software\Microsoft\Windows\CurrentVersion\Policies\ActiveDesktop" /v NoChangingWallPaper /f | Out-Null 2>&1
+            reg delete "HKU\DEFUSER\Software\Microsoft\Windows\CurrentVersion\Policies\System" /v Wallpaper /f | Out-Null 2>&1
+            reg delete "HKU\DEFUSER\Software\Microsoft\Windows\CurrentVersion\Policies\System" /v WallpaperStyle /f | Out-Null 2>&1
+
             if (Test-Path $wallpaperTarget) {
                 reg add "HKU\DEFUSER\Control Panel\Desktop" /v Wallpaper /t REG_SZ /d "C:\Windows\Web\Custom\wallpaper.jpg" /f | Out-Null
                 reg add "HKU\DEFUSER\Control Panel\Desktop" /v WallpaperStyle /t REG_SZ /d 10 /f | Out-Null
                 reg add "HKU\DEFUSER\Control Panel\Desktop" /v TileWallpaper /t REG_SZ /d 0 /f | Out-Null
             }
+
+            reg add "HKU\DEFUSER\Software\Microsoft\Windows\CurrentVersion\RunOnce" /v PichauApplyBranding /t REG_SZ /d "powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File C:\Windows\Setup\Scripts\ApplyUserBranding.ps1" /f | Out-Null
+
             reg unload HKU\DEFUSER | Out-Null
         }
     } catch {}
 }
+
 
 function New-IndicatorCircle {
     param(
@@ -237,20 +252,17 @@ function New-IndicatorCircle {
 
     $panel = New-Object System.Windows.Forms.Panel
     $panel.Location = P $X $Y
-    $panel.Size = Z 28 28
+    $panel.Size = Z 30 24
     $panel.BackColor = $BackColor
+    $panel.BorderStyle = 'FixedSingle'
 
     $label = New-Object System.Windows.Forms.Label
     $label.Dock = 'Fill'
     $label.TextAlign = 'MiddleCenter'
     $label.ForeColor = $ForeColor
-    $label.Font = Fnt 'Segoe UI' 9 ([System.Drawing.FontStyle]::Bold)
+    $label.Font = Fnt 'Consolas' 9 ([System.Drawing.FontStyle]::Bold)
     $label.Text = $Text
     $panel.Controls.Add($label)
-
-    $panel.Add_Resize({
-        Set-RoundedControl -Control $panel -Radius (S 14)
-    })
 
     return $panel
 }
@@ -259,10 +271,10 @@ function New-InstallerUi {
     param([string]$InstallRoot)
 
     $form = New-Object System.Windows.Forms.Form
-    $form.Text = 'Premium DualBoot Installer'
+    $form.Text = 'Pichau Retro Installer'
     $form.StartPosition = 'Manual'
     $form.FormBorderStyle = 'None'
-    $form.BackColor = [System.Drawing.Color]::FromArgb(10, 10, 12)
+    $form.BackColor = [System.Drawing.Color]::FromArgb(5, 5, 7)
     $form.Size = Z 1040 620
     $form.TopMost = $true
     $form.ShowInTaskbar = $true
@@ -273,54 +285,42 @@ function New-InstallerUi {
         [int](($screenBounds.Height - $form.Height) / 2)
     )
 
-    $form.Add_Shown({
-        Set-RoundedControl -Control $form -Radius (S 24)
-    })
-
     $root = New-Object System.Windows.Forms.Panel
     $root.Dock = 'Fill'
-    $root.BackColor = [System.Drawing.Color]::FromArgb(10, 10, 12)
+    $root.BackColor = [System.Drawing.Color]::FromArgb(5, 5, 7)
     $form.Controls.Add($root)
 
-    $glow = New-Object System.Windows.Forms.Panel
-    $glow.Location = P 18 18
-    $glow.Size = Z 1004 584
-    $glow.BackColor = [System.Drawing.Color]::FromArgb(28, 0, 0)
-    $root.Controls.Add($glow)
-    $glow.Add_Resize({
-        Set-RoundedControl -Control $glow -Radius (S 26)
-    })
+    $outerFrame = New-Object System.Windows.Forms.Panel
+    $outerFrame.Location = P 18 18
+    $outerFrame.Size = Z 1004 584
+    $outerFrame.BackColor = [System.Drawing.Color]::FromArgb(60, 0, 0)
+    $outerFrame.BorderStyle = 'FixedSingle'
+    $root.Controls.Add($outerFrame)
 
     $shell = New-Object System.Windows.Forms.Panel
-    $shell.Location = P 10 10
-    $shell.Size = Z 984 564
-    $shell.BackColor = [System.Drawing.Color]::FromArgb(15, 15, 18)
-    $glow.Controls.Add($shell)
-    $shell.Add_Resize({
-        Set-RoundedControl -Control $shell -Radius (S 24)
-    })
+    $shell.Location = P 6 6
+    $shell.Size = Z 992 572
+    $shell.BackColor = [System.Drawing.Color]::FromArgb(8, 8, 10)
+    $shell.BorderStyle = 'FixedSingle'
+    $outerFrame.Controls.Add($shell)
 
     $left = New-Object System.Windows.Forms.Panel
     $left.Location = P 0 0
-    $left.Size = Z 340 564
-    $left.BackColor = [System.Drawing.Color]::FromArgb(24, 7, 9)
+    $left.Size = Z 318 572
+    $left.BackColor = [System.Drawing.Color]::FromArgb(23, 3, 6)
+    $left.BorderStyle = 'FixedSingle'
     $shell.Controls.Add($left)
-    $left.Add_Resize({
-        Set-RoundedControl -Control $left -Radius (S 24)
-    })
 
     $logoFrame = New-Object System.Windows.Forms.Panel
-    $logoFrame.Location = P 40 34
-    $logoFrame.Size = Z 260 170
-    $logoFrame.BackColor = [System.Drawing.Color]::FromArgb(34, 12, 15)
+    $logoFrame.Location = P 36 34
+    $logoFrame.Size = Z 246 158
+    $logoFrame.BackColor = [System.Drawing.Color]::FromArgb(55, 5, 12)
+    $logoFrame.BorderStyle = 'FixedSingle'
     $left.Controls.Add($logoFrame)
-    $logoFrame.Add_Resize({
-        Set-RoundedControl -Control $logoFrame -Radius (S 20)
-    })
 
     $logoBox = New-Object System.Windows.Forms.PictureBox
-    $logoBox.Location = P 18 18
-    $logoBox.Size = Z 224 134
+    $logoBox.Location = P 22 26
+    $logoBox.Size = Z 200 78
     $logoBox.SizeMode = 'Zoom'
     $logoPng = Join-Path $InstallRoot 'Script\logo.png'
     $logoJpg = Join-Path $InstallRoot 'Script\logo.jpg'
@@ -331,205 +331,243 @@ function New-InstallerUi {
     }
     $logoFrame.Controls.Add($logoBox)
 
+    $logoTag = New-Object System.Windows.Forms.Label
+    $logoTag.Location = P 16 120
+    $logoTag.Size = Z 212 20
+    $logoTag.TextAlign = 'MiddleCenter'
+    $logoTag.ForeColor = [System.Drawing.Color]::FromArgb(255, 88, 88)
+    $logoTag.Font = Fnt 'Consolas' 8 ([System.Drawing.FontStyle]::Bold)
+    $logoTag.Text = 'RETRO DEPLOY INTERFACE'
+    $logoFrame.Controls.Add($logoTag)
+
     $brand = New-Object System.Windows.Forms.Label
-    $brand.Location = P 40 224
-    $brand.Size = Z 260 34
-    $brand.ForeColor = [System.Drawing.Color]::FromArgb(255, 230, 230)
-    $brand.Font = Fnt 'Segoe UI' 20 ([System.Drawing.FontStyle]::Bold)
-    $brand.Text = 'DualBoot Setup'
+    $brand.Location = P 36 214
+    $brand.Size = Z 246 30
+    $brand.ForeColor = [System.Drawing.Color]::FromArgb(255, 246, 246)
+    $brand.Font = Fnt 'Consolas' 18 ([System.Drawing.FontStyle]::Bold)
+    $brand.Text = 'DUALBOOT SETUP'
     $left.Controls.Add($brand)
 
     $desc = New-Object System.Windows.Forms.Label
-    $desc.Location = P 40 268
-    $desc.Size = Z 260 90
-    $desc.ForeColor = [System.Drawing.Color]::FromArgb(210, 180, 180)
-    $desc.Font = Fnt 'Segoe UI' 10
-    $desc.Text = "Instalacao premium`r`ncom visual moderno`r`ne progresso em tempo real"
+    $desc.Location = P 36 254
+    $desc.Size = Z 246 72
+    $desc.ForeColor = [System.Drawing.Color]::FromArgb(235, 214, 214)
+    $desc.Font = Fnt 'Consolas' 9
+    $desc.Text = "INSTALACAO AUTOMATICA"
     $left.Controls.Add($desc)
 
     $miniCard = New-Object System.Windows.Forms.Panel
-    $miniCard.Location = P 40 390
-    $miniCard.Size = Z 260 90
-    $miniCard.BackColor = [System.Drawing.Color]::FromArgb(32, 11, 14)
+    $miniCard.Location = P 36 392
+    $miniCard.Size = Z 246 94
+    $miniCard.BackColor = [System.Drawing.Color]::FromArgb(45, 5, 11)
+    $miniCard.BorderStyle = 'FixedSingle'
     $left.Controls.Add($miniCard)
-    $miniCard.Add_Resize({
-        Set-RoundedControl -Control $miniCard -Radius (S 18)
-    })
 
     $miniTitle = New-Object System.Windows.Forms.Label
-    $miniTitle.Location = P 18 14
-    $miniTitle.Size = Z 220 22
-    $miniTitle.ForeColor = [System.Drawing.Color]::FromArgb(255, 235, 235)
-    $miniTitle.Font = Fnt 'Segoe UI' 10 ([System.Drawing.FontStyle]::Bold)
-    $miniTitle.Text = 'Modo automatico'
+    $miniTitle.Location = P 16 12
+    $miniTitle.Size = Z 210 18
+    $miniTitle.ForeColor = [System.Drawing.Color]::FromArgb(255, 242, 242)
+    $miniTitle.Font = Fnt 'Consolas' 9 ([System.Drawing.FontStyle]::Bold)
+    $miniTitle.Text = 'MODO AUTOMATICO'
     $miniCard.Controls.Add($miniTitle)
 
     $miniText = New-Object System.Windows.Forms.Label
-    $miniText.Location = P 18 40
-    $miniText.Size = Z 220 34
-    $miniText.ForeColor = [System.Drawing.Color]::FromArgb(205, 178, 178)
-    $miniText.Font = Fnt 'Segoe UI' 9
-    $miniText.Text = 'Boot, imagem e branding sem intervencao manual'
+    $miniText.Location = P 16 38
+    $miniText.Size = Z 210 38
+    $miniText.ForeColor = [System.Drawing.Color]::FromArgb(220, 190, 190)
+    $miniText.Font = Fnt 'Consolas' 8
+    $miniText.Text = 'BOOT + DISM + DRIVERS'
     $miniCard.Controls.Add($miniText)
 
+    $miniTag = New-Object System.Windows.Forms.Label
+    $miniTag.Location = P 16 76
+    $miniTag.Size = Z 210 10
+    $miniTag.ForeColor = [System.Drawing.Color]::FromArgb(185, 95, 95)
+    $miniTag.Font = Fnt 'Consolas' 7 ([System.Drawing.FontStyle]::Bold)
+    $miniTag.Text = 'STATUS // ONLINE'
+    $miniCard.Controls.Add($miniTag)
+
     $footerTag = New-Object System.Windows.Forms.Label
-    $footerTag.Location = P 40 512
-    $footerTag.Size = Z 260 20
-    $footerTag.ForeColor = [System.Drawing.Color]::FromArgb(150, 120, 120)
-    $footerTag.Font = Fnt 'Segoe UI' 8
-    $footerTag.Text = 'Script feito por Adney Correa com auxilio da IA'
+    $footerTag.Location = P 36 522
+    $footerTag.Size = Z 246 18
+    $footerTag.ForeColor = [System.Drawing.Color]::FromArgb(160, 100, 100)
+    $footerTag.Font = Fnt 'Consolas' 7
+    $footerTag.Text = 'ADNEY CORREA // IA'
     $left.Controls.Add($footerTag)
 
     $right = New-Object System.Windows.Forms.Panel
-    $right.Location = P 340 0
-    $right.Size = Z 644 564
-    $right.BackColor = [System.Drawing.Color]::FromArgb(15, 15, 18)
+    $right.Location = P 318 0
+    $right.Size = Z 674 572
+    $right.BackColor = [System.Drawing.Color]::FromArgb(7, 7, 9)
+    $right.BorderStyle = 'FixedSingle'
     $shell.Controls.Add($right)
 
     $topAccent = New-Object System.Windows.Forms.Panel
-    $topAccent.Location = P 40 30
-    $topAccent.Size = Z 72 6
-    $topAccent.BackColor = [System.Drawing.Color]::FromArgb(200, 20, 35)
+    $topAccent.Location = P 34 28
+    $topAccent.Size = Z 88 5
+    $topAccent.BackColor = [System.Drawing.Color]::FromArgb(255, 38, 48)
     $right.Controls.Add($topAccent)
-    $topAccent.Add_Resize({
-        Set-RoundedControl -Control $topAccent -Radius (S 3)
-    })
 
     $header = New-Object System.Windows.Forms.Label
-    $header.Location = P 40 54
-    $header.Size = Z 360 40
+    $header.Location = P 34 48
+    $header.Size = Z 390 34
     $header.ForeColor = [System.Drawing.Color]::White
-    $header.Font = Fnt 'Segoe UI' 20 ([System.Drawing.FontStyle]::Bold)
-    $header.Text = 'Preparando instalacao'
+    $header.Font = Fnt 'Consolas' 18 ([System.Drawing.FontStyle]::Bold)
+    $header.Text = 'PREPARANDO INSTALACAO'
     $right.Controls.Add($header)
 
     $status = New-Object System.Windows.Forms.Label
-    $status.Location = P 40 116
-    $status.Size = Z 420 34
-    $status.ForeColor = [System.Drawing.Color]::FromArgb(255, 245, 245)
-    $status.Font = Fnt 'Segoe UI' 15 ([System.Drawing.FontStyle]::Bold)
-    $status.Text = 'Iniciando'
+    $status.Location = P 34 108
+    $status.Size = Z 430 28
+    $status.ForeColor = [System.Drawing.Color]::FromArgb(255, 244, 244)
+    $status.Font = Fnt 'Consolas' 14 ([System.Drawing.FontStyle]::Bold)
+    $status.Text = 'INICIANDO'
     $right.Controls.Add($status)
 
     $percent = New-Object System.Windows.Forms.Label
-    $percent.Location = P 500 96
-    $percent.Size = Z 100 62
+    $percent.Location = P 522 90
+    $percent.Size = Z 110 56
     $percent.TextAlign = 'MiddleRight'
-    $percent.ForeColor = [System.Drawing.Color]::FromArgb(235, 40, 55)
-    $percent.Font = Fnt 'Segoe UI' 30 ([System.Drawing.FontStyle]::Bold)
+    $percent.ForeColor = [System.Drawing.Color]::FromArgb(255, 52, 64)
+    $percent.Font = Fnt 'Consolas' 28 ([System.Drawing.FontStyle]::Bold)
     $percent.Text = '0%'
     $right.Controls.Add($percent)
 
+    $osBadgeOuter = New-Object System.Windows.Forms.Panel
+    $osBadgeOuter.Location = P 454 26
+    $osBadgeOuter.Size = Z 176 30
+    $osBadgeOuter.BackColor = [System.Drawing.Color]::FromArgb(95, 8, 15)
+    $osBadgeOuter.BorderStyle = 'FixedSingle'
+    $right.Controls.Add($osBadgeOuter)
+
     $osBadge = New-Object System.Windows.Forms.Panel
-    $osBadge.Location = P 430 28
-    $osBadge.Size = Z 170 34
-    $osBadge.BackColor = [System.Drawing.Color]::FromArgb(32, 11, 14)
-    $right.Controls.Add($osBadge)
-    $osBadge.Add_Resize({
-        Set-RoundedControl -Control $osBadge -Radius (S 17)
-    })
+    $osBadge.Location = P 2 2
+    $osBadge.Size = Z 170 24
+    $osBadge.BackColor = [System.Drawing.Color]::FromArgb(12, 10, 12)
+    $osBadge.BorderStyle = 'FixedSingle'
+    $osBadgeOuter.Controls.Add($osBadge)
 
     $osLabel = New-Object System.Windows.Forms.Label
     $osLabel.Dock = 'Fill'
     $osLabel.TextAlign = 'MiddleCenter'
-    $osLabel.ForeColor = [System.Drawing.Color]::FromArgb(255, 235, 235)
-    $osLabel.Font = Fnt 'Segoe UI' 10 ([System.Drawing.FontStyle]::Bold)
-    $osLabel.Text = 'Windows'
+    $osLabel.ForeColor = [System.Drawing.Color]::FromArgb(255, 232, 232)
+    $osLabel.Font = Fnt 'Consolas' 9 ([System.Drawing.FontStyle]::Bold)
+    $osLabel.Text = 'WINDOWS'
     $osBadge.Controls.Add($osLabel)
 
+    $detailOuter = New-Object System.Windows.Forms.Panel
+    $detailOuter.Location = P 34 164
+    $detailOuter.Size = Z 596 110
+    $detailOuter.BackColor = [System.Drawing.Color]::FromArgb(80, 8, 14)
+    $detailOuter.BorderStyle = 'FixedSingle'
+    $right.Controls.Add($detailOuter)
+
     $detailCard = New-Object System.Windows.Forms.Panel
-    $detailCard.Location = P 40 170
-    $detailCard.Size = Z 564 108
-    $detailCard.BackColor = [System.Drawing.Color]::FromArgb(22, 22, 26)
-    $right.Controls.Add($detailCard)
-    $detailCard.Add_Resize({
-        Set-RoundedControl -Control $detailCard -Radius (S 18)
-    })
+    $detailCard.Location = P 3 3
+    $detailCard.Size = Z 588 102
+    $detailCard.BackColor = [System.Drawing.Color]::FromArgb(16, 16, 20)
+    $detailCard.BorderStyle = 'FixedSingle'
+    $detailOuter.Controls.Add($detailCard)
 
     $detail = New-Object System.Windows.Forms.Label
-    $detail.Location = P 18 18
-    $detail.Size = Z 528 72
-    $detail.ForeColor = [System.Drawing.Color]::FromArgb(205, 205, 210)
-    $detail.Font = Fnt 'Segoe UI' 10
-    $detail.Text = 'Aguardando etapa inicial'
+    $detail.Location = P 16 16
+    $detail.Size = Z 554 70
+    $detail.ForeColor = [System.Drawing.Color]::FromArgb(224, 224, 230)
+    $detail.Font = Fnt 'Consolas' 9
+    $detail.Text = 'AGUARDANDO ETAPA INICIAL'
+    $detail.AutoEllipsis = $true
     $detailCard.Controls.Add($detail)
 
+    $barOuter = New-Object System.Windows.Forms.Panel
+    $barOuter.Location = P 34 298
+    $barOuter.Size = Z 596 32
+    $barOuter.BackColor = [System.Drawing.Color]::FromArgb(80, 8, 14)
+    $barOuter.BorderStyle = 'FixedSingle'
+    $right.Controls.Add($barOuter)
+
     $barBack = New-Object System.Windows.Forms.Panel
-    $barBack.Location = P 40 304
-    $barBack.Size = Z 564 28
-    $barBack.BackColor = [System.Drawing.Color]::FromArgb(35, 35, 40)
-    $right.Controls.Add($barBack)
-    $barBack.Add_Resize({
-        Set-RoundedControl -Control $barBack -Radius (S 14)
-    })
+    $barBack.Location = P 3 3
+    $barBack.Size = Z 588 24
+    $barBack.BackColor = [System.Drawing.Color]::FromArgb(34, 34, 40)
+    $barBack.BorderStyle = 'FixedSingle'
+    $barOuter.Controls.Add($barBack)
 
     $barFillGlow = New-Object System.Windows.Forms.Panel
     $barFillGlow.Location = P 0 0
-    $barFillGlow.Size = Z 1 28
-    $barFillGlow.BackColor = [System.Drawing.Color]::FromArgb(120, 20, 28)
+    $barFillGlow.Size = Z 1 24
+    $barFillGlow.BackColor = [System.Drawing.Color]::FromArgb(120, 14, 22)
+    $barFillGlow.BorderStyle = 'FixedSingle'
     $barBack.Controls.Add($barFillGlow)
 
     $barFill = New-Object System.Windows.Forms.Panel
     $barFill.Location = P 0 0
-    $barFill.Size = Z 1 28
-    $barFill.BackColor = [System.Drawing.Color]::FromArgb(215, 24, 38)
+    $barFill.Size = Z 1 24
+    $barFill.BackColor = [System.Drawing.Color]::FromArgb(220, 24, 38)
+    $barFill.BorderStyle = 'FixedSingle'
     $barBack.Controls.Add($barFill)
 
-    $barFillGlow.Add_Resize({
-        Set-RoundedControl -Control $barFillGlow -Radius (S 14)
-    })
-    $barFill.Add_Resize({
-        Set-RoundedControl -Control $barFill -Radius (S 14)
-    })
+    $stepsOuter = New-Object System.Windows.Forms.Panel
+    $stepsOuter.Location = P 34 350
+    $stepsOuter.Size = Z 596 188
+    $stepsOuter.BackColor = [System.Drawing.Color]::FromArgb(80, 8, 14)
+    $stepsOuter.BorderStyle = 'FixedSingle'
+    $right.Controls.Add($stepsOuter)
+
+    $stepsPanel = New-Object System.Windows.Forms.Panel
+    $stepsPanel.Location = P 3 3
+    $stepsPanel.Size = Z 588 180
+    $stepsPanel.BackColor = [System.Drawing.Color]::FromArgb(10, 10, 12)
+    $stepsPanel.BorderStyle = 'FixedSingle'
+    $stepsOuter.Controls.Add($stepsPanel)
 
     $stepsTitle = New-Object System.Windows.Forms.Label
-    $stepsTitle.Location = P 40 360
-    $stepsTitle.Size = Z 200 24
+    $stepsTitle.Location = P 14 12
+    $stepsTitle.Size = Z 220 18
     $stepsTitle.ForeColor = [System.Drawing.Color]::FromArgb(255, 240, 240)
-    $stepsTitle.Font = Fnt 'Segoe UI' 10 ([System.Drawing.FontStyle]::Bold)
-    $stepsTitle.Text = 'Fluxo de instalacao'
-    $right.Controls.Add($stepsTitle)
+    $stepsTitle.Font = Fnt 'Consolas' 10 ([System.Drawing.FontStyle]::Bold)
+    $stepsTitle.Text = 'FLUXO DE INSTALACAO'
+    $stepsPanel.Controls.Add($stepsTitle)
 
-    $step1Dot = New-IndicatorCircle -Text '1' -BackColor ([System.Drawing.Color]::FromArgb(215, 24, 38)) -ForeColor ([System.Drawing.Color]::White) -X 40 -Y 402
-    $step2Dot = New-IndicatorCircle -Text '2' -BackColor ([System.Drawing.Color]::FromArgb(55, 55, 60)) -ForeColor ([System.Drawing.Color]::White) -X 40 -Y 444
-    $step3Dot = New-IndicatorCircle -Text '3' -BackColor ([System.Drawing.Color]::FromArgb(55, 55, 60)) -ForeColor ([System.Drawing.Color]::White) -X 40 -Y 486
-    $step4Dot = New-IndicatorCircle -Text '4' -BackColor ([System.Drawing.Color]::FromArgb(55, 55, 60)) -ForeColor ([System.Drawing.Color]::White) -X 40 -Y 528
-    $right.Controls.Add($step1Dot)
-    $right.Controls.Add($step2Dot)
-    $right.Controls.Add($step3Dot)
-    $right.Controls.Add($step4Dot)
+    $step1Dot = New-IndicatorCircle -Text '1' -BackColor ([System.Drawing.Color]::FromArgb(220, 24, 38)) -ForeColor ([System.Drawing.Color]::White) -X 16 -Y 44
+    $step2Dot = New-IndicatorCircle -Text '2' -BackColor ([System.Drawing.Color]::FromArgb(55, 55, 60)) -ForeColor ([System.Drawing.Color]::White) -X 16 -Y 78
+    $step3Dot = New-IndicatorCircle -Text '3' -BackColor ([System.Drawing.Color]::FromArgb(55, 55, 60)) -ForeColor ([System.Drawing.Color]::White) -X 16 -Y 112
+    $step4Dot = New-IndicatorCircle -Text '4' -BackColor ([System.Drawing.Color]::FromArgb(55, 55, 60)) -ForeColor ([System.Drawing.Color]::White) -X 16 -Y 146
+    $stepsPanel.Controls.Add($step1Dot)
+    $stepsPanel.Controls.Add($step2Dot)
+    $stepsPanel.Controls.Add($step3Dot)
+    $stepsPanel.Controls.Add($step4Dot)
 
     $step1 = New-Object System.Windows.Forms.Label
-    $step1.Location = P 80 404
-    $step1.Size = Z 480 24
+    $step1.Location = P 58 44
+    $step1.Size = Z 494 24
     $step1.ForeColor = [System.Drawing.Color]::White
-    $step1.Font = Fnt 'Segoe UI' 10 ([System.Drawing.FontStyle]::Bold)
-    $step1.Text = 'Validacao da midia'
-    $right.Controls.Add($step1)
+    $step1.Font = Fnt 'Consolas' 9 ([System.Drawing.FontStyle]::Bold)
+    $step1.Text = 'VALIDACAO DA MIDIA'
+    $stepsPanel.Controls.Add($step1)
 
     $step2 = New-Object System.Windows.Forms.Label
-    $step2.Location = P 80 446
-    $step2.Size = Z 480 24
-    $step2.ForeColor = [System.Drawing.Color]::FromArgb(155, 155, 165)
-    $step2.Font = Fnt 'Segoe UI' 10 ([System.Drawing.FontStyle]::Bold)
-    $step2.Text = 'Preparacao do disco'
-    $right.Controls.Add($step2)
+    $step2.Location = P 58 78
+    $step2.Size = Z 494 24
+    $step2.ForeColor = [System.Drawing.Color]::FromArgb(165, 165, 176)
+    $step2.Font = Fnt 'Consolas' 9 ([System.Drawing.FontStyle]::Bold)
+    $step2.Text = 'PREPARACAO DO DISCO'
+    $stepsPanel.Controls.Add($step2)
 
     $step3 = New-Object System.Windows.Forms.Label
-    $step3.Location = P 80 488
-    $step3.Size = Z 480 24
-    $step3.ForeColor = [System.Drawing.Color]::FromArgb(155, 155, 165)
-    $step3.Font = Fnt 'Segoe UI' 10 ([System.Drawing.FontStyle]::Bold)
-    $step3.Text = 'Aplicacao da imagem'
-    $right.Controls.Add($step3)
+    $step3.Location = P 58 112
+    $step3.Size = Z 494 24
+    $step3.ForeColor = [System.Drawing.Color]::FromArgb(165, 165, 176)
+    $step3.Font = Fnt 'Consolas' 9 ([System.Drawing.FontStyle]::Bold)
+    $step3.Text = 'APLICACAO DA IMAGEM'
+    $stepsPanel.Controls.Add($step3)
 
     $step4 = New-Object System.Windows.Forms.Label
-    $step4.Location = P 80 530
-    $step4.Size = Z 480 24
-    $step4.ForeColor = [System.Drawing.Color]::FromArgb(155, 155, 165)
-    $step4.Font = Fnt 'Segoe UI' 10 ([System.Drawing.FontStyle]::Bold)
-    $step4.Text = 'Boot e finalizacao'
-    $right.Controls.Add($step4)
+    $step4.Location = P 58 146
+    $step4.Size = Z 494 24
+    $step4.ForeColor = [System.Drawing.Color]::FromArgb(165, 165, 176)
+    $step4.Font = Fnt 'Consolas' 9 ([System.Drawing.FontStyle]::Bold)
+    $step4.Text = 'BOOT E FINALIZACAO'
+    $stepsPanel.Controls.Add($step4)
 
     return [pscustomobject]@{
         Form = $form
@@ -559,10 +597,10 @@ function Set-StepVisual {
         [int]$ActiveStep
     )
 
-    $inactiveText = [System.Drawing.Color]::FromArgb(155, 155, 165)
+    $inactiveText = [System.Drawing.Color]::FromArgb(165, 165, 176)
     $activeText = [System.Drawing.Color]::White
-    $doneBack = [System.Drawing.Color]::FromArgb(130, 18, 28)
-    $activeBack = [System.Drawing.Color]::FromArgb(215, 24, 38)
+    $doneBack = [System.Drawing.Color]::FromArgb(110, 12, 20)
+    $activeBack = [System.Drawing.Color]::FromArgb(220, 24, 38)
     $inactiveBack = [System.Drawing.Color]::FromArgb(55, 55, 60)
 
     $steps = @(
@@ -586,8 +624,6 @@ function Set-StepVisual {
             $label.ForeColor = $inactiveText
             $dot.BackColor = $inactiveBack
         }
-
-        Set-RoundedControl -Control $dot -Radius (S 14)
     }
 }
 
@@ -603,19 +639,35 @@ function Update-Ui {
     if ($Percent -lt 0) { $Percent = 0 }
     if ($Percent -gt 100) { $Percent = 100 }
 
-    $Ui.Status.Text = $Status
+    if ([string]::IsNullOrWhiteSpace($Status)) { $Status = 'PROCESSANDO' }
+    if ([string]::IsNullOrWhiteSpace($Detail)) { $Detail = 'AGUARDANDO ETAPA' }
+
+    $headerText = switch ($Step) {
+        1 { 'PREPARANDO INSTALACAO' }
+        2 { 'CONFIGURANDO DISCO' }
+        3 { 'APLICANDO IMAGEM' }
+        4 { 'FINALIZANDO BOOT' }
+        default { 'PREPARANDO INSTALACAO' }
+    }
+
+    if ($Ui.Header.Text -notlike 'ERRO*') {
+        $Ui.Header.Text = $headerText
+    }
+
+    $Ui.Status.Text = $Status.ToUpper()
     $Ui.Detail.Text = $Detail
     $Ui.Percent.Text = "$Percent%"
 
-    $maxWidth = $Ui.BarBack.Width
-    $newWidth = [math]::Max(1, [math]::Round(($maxWidth * $Percent) / 100))
-    $glowWidth = [math]::Min($maxWidth, $newWidth + (S 12))
+    $maxWidth = [math]::Max(1, $Ui.BarBack.Width)
+    $rawWidth = [math]::Round(($maxWidth * $Percent) / 100)
+    $pixelUnit = [math]::Max(4, (S 8))
+    $newWidth = [math]::Max(1, [int]([math]::Floor($rawWidth / $pixelUnit) * $pixelUnit))
+    if ($Percent -gt 0 -and $newWidth -lt $pixelUnit) { $newWidth = $pixelUnit }
+    if ($newWidth -gt $maxWidth) { $newWidth = $maxWidth }
+    $glowWidth = [math]::Min($maxWidth, $newWidth + (S 8))
 
     $Ui.BarFillGlow.Width = $glowWidth
     $Ui.BarFill.Width = $newWidth
-
-    Set-RoundedControl -Control $Ui.BarFillGlow -Radius (S 14)
-    Set-RoundedControl -Control $Ui.BarFill -Radius (S 14)
 
     Set-StepVisual -Ui $Ui -ActiveStep $Step
     [System.Windows.Forms.Application]::DoEvents()
@@ -885,15 +937,22 @@ function Copy-SetupComplete {
         [string]$WindowsDrive
     )
 
-    $source = Join-Path $InstallRoot 'SetupComplete.cmd'
-    if (-not (Test-Path $source)) { return }
-
     $destDir = "$WindowsDrive\Windows\Setup\Scripts"
     if (-not (Test-Path $destDir)) {
         New-Item -Path $destDir -ItemType Directory -Force | Out-Null
     }
 
-    Copy-Item -Path $source -Destination (Join-Path $destDir 'SetupComplete.cmd') -Force
+    $filesToCopy = @(
+        @{ Source = (Join-Path $InstallRoot 'SetupComplete.cmd'); Destination = 'SetupComplete.cmd' },
+        @{ Source = (Join-Path $InstallRoot 'Script\Instalar_Drivers_Offline.cmd'); Destination = 'Instalar_Drivers_Offline.cmd' },
+        @{ Source = (Join-Path $InstallRoot 'Script\Instalar_Drivers_Offline.ps1'); Destination = 'Instalar_Drivers_Offline.ps1' }
+    )
+
+    foreach ($file in $filesToCopy) {
+        if (Test-Path $file.Source) {
+            Copy-Item -Path $file.Source -Destination (Join-Path $destDir $file.Destination) -Force
+        }
+    }
 }
 
 function Create-BootFiles {
@@ -936,41 +995,67 @@ function Get-FirmwareBootEntries {
 }
 
 function Set-NextBootToInternalWindows {
-    param([bool]$IsUefi)
+    param(
+        [bool]$IsUefi,
+        [string]$SystemDrive
+    )
 
     if (-not $IsUefi) { return }
 
     try {
-        $entries = Get-FirmwareBootEntries
+        $efiBcd = "$SystemDrive`:\EFI\Microsoft\Boot\BCD"
+        if (-not (Test-Path $efiBcd)) { return }
+
+        $fwText = bcdedit /enum firmware 2>&1 | Out-String
+        if ($LASTEXITCODE -ne 0) { return }
+
+        $entries = @()
+        $current = $null
+
+        foreach ($line in ($fwText -split "`r?`n")) {
+            if ($line -match '^Firmware Application \((.+)\)$') {
+                if ($current) { $entries += [pscustomobject]$current }
+                $current = @{
+                    Type = $Matches[1]
+                    Identifier = ''
+                    Description = ''
+                }
+                continue
+            }
+
+            if (-not $current) { continue }
+
+            if ($line -match '^identifier\s+(\{.+\})$') {
+                $current.Identifier = $Matches[1]
+                continue
+            }
+
+            if ($line -match '^description\s+(.+)$') {
+                $current.Description = $Matches[1].Trim()
+                continue
+            }
+        }
+
+        if ($current) { $entries += [pscustomobject]$current }
+
         $candidate = $entries | Where-Object {
-            $_.Description -match 'Windows Boot Manager' -or
-            $_.Description -match 'SSD' -or
-            $_.Description -match 'NVMe' -or
-            $_.Description -match 'Hard Drive'
-        } | Where-Object {
-            $_.Description -notmatch 'USB|UEFI: USB|Removable|Pendrive'
+            $_.Description -eq 'Windows Boot Manager'
         } | Select-Object -First 1
 
+        if (-not $candidate) {
+            $candidate = $entries | Where-Object {
+                $_.Description -match 'Windows Boot Manager'
+            } | Where-Object {
+                $_.Description -notmatch 'USB|Removable|Pendrive'
+            } | Select-Object -First 1
+        }
+
         if ($candidate -and $candidate.Identifier) {
+            bcdedit /store $efiBcd /set '{bootmgr}' device partition="$SystemDrive`:" | Out-Null
+            bcdedit /store $efiBcd /set '{bootmgr}' path \EFI\Microsoft\Boot\bootmgfw.efi | Out-Null
             bcdedit /set '{fwbootmgr}' bootsequence $candidate.Identifier | Out-Null
         }
     } catch {}
-}
-
-function Test-ExistingAppliedWindows {
-    param([int]$DiskNumber)
-
-    $parts = Get-Partition -DiskNumber $DiskNumber -ErrorAction SilentlyContinue
-    foreach ($part in $parts) {
-        try {
-            if (-not $part.DriveLetter) { continue }
-            $drive = "$($part.DriveLetter):"
-            if (Test-Path "$drive\Windows\System32\winload.efi" -or Test-Path "$drive\Windows\System32\winload.exe") {
-                return $drive
-            }
-        } catch {}
-    }
-    return $null
 }
 
 Hide-ConsoleWindow
@@ -1099,14 +1184,7 @@ if ($windowsLetter -eq $systemLetter) {
     Stop-WithError 'Conflito interno ao selecionar letras temporarias.'
 }
 
-$existingWindows = Test-ExistingAppliedWindows -DiskNumber $targetDisk.Number
-if ($existingWindows) {
-    Update-Ui -Ui $script:Ui -Percent 96 -Status 'Windows ja aplicado' -Detail "Foi encontrada uma instalacao em $existingWindows. Reiniciando pelo disco interno." -Step 4
-    Set-NextBootToInternalWindows -IsUefi $isUefi
-    Start-Sleep -Seconds 5
-    wpeutil reboot
-    exit 0
-}
+# Bloco removido: sempre reinstalar quando iniciar pelo pendrive.
 
 Update-Ui -Ui $script:Ui -Percent 14 -Status 'Hardware validado' -Detail ("Sistema selecionado: {0}`r`nCPU: {1}`r`nRAM: {2} GB`r`nTPM: {3}`r`nMotivo: {4}" -f $chosenName, $cpuName, $ramGB, $tpmPresent, $chosenReason) -Step 1
 Start-Sleep -Milliseconds 700
@@ -1133,9 +1211,28 @@ Copy-SetupComplete -InstallRoot $installRoot -WindowsDrive "$windowsLetter`:"
 
 Update-Ui -Ui $script:Ui -Percent 94 -Status 'Criando boot' -Detail 'Configurando arquivos de boot do Windows' -Step 4
 Create-BootFiles -IsUefi $isUefi -SystemDrive $systemLetter -WindowsDrive "$windowsLetter`:"
-Set-NextBootToInternalWindows -IsUefi $isUefi
+Set-NextBootToInternalWindows -IsUefi $isUefi -SystemDrive $systemLetter
 
-Update-Ui -Ui $script:Ui -Percent 100 -Status 'Instalacao concluida' -Detail 'O computador sera reiniciado para continuar no disco interno.' -Step 4
-Start-Sleep -Seconds 4
-wpeutil reboot
+Update-Ui -Ui $script:Ui -Percent 100 -Status 'Instalacao concluida' -Detail 'Reiniciando para continuar no disco interno.' -Step 4
+
+try {
+    [System.Windows.Forms.Application]::DoEvents()
+} catch {}
+
+Start-Sleep -Seconds 3
+
+try {
+    wpeutil UpdateBootInfo | Out-Null
+} catch {}
+
+try {
+    $null = mountvol "$systemLetter`:" /L 2>$null
+} catch {}
+
+try {
+    shutdown.exe /r /t 0 /f
+} catch {
+    wpeutil reboot
+}
+
 exit 0
