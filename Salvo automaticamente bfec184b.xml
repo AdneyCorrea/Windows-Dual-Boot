@@ -1,0 +1,399 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Preset isAutoSaved="true" xmlns="urn:schemas-nliteos-com:pn.v1">
+	<Date>03/07/2026 08:54:06</Date>
+	<Version>1.1</Version>
+	<AppInfo>
+		<Version>2026.3.10854</Version>
+		<Licensed>No</Licensed>
+		<Protections>Yes</Protections>
+		<Host>Windows 11 Professional 25H2 x64 - 10.0.26200.7840 (pt-PT)</Host>
+	</AppInfo>
+	<ImageInfo>
+		<Version mode="offline">Windows 11 Professional 25H2 x64 - 10.0.26200.7840 (pt-BR)</Version>
+		<GUID>{D8A93ED0-1E59-4228-BC6E-CEB07E0D1986}</GUID>
+	</ImageInfo>
+	<RemoveComponents AppRemovalMode="DISM">
+		<c>1527c705-839a-4832-9118-54d4bd6a0c89 'File Picker'</c>
+		<c>clipchamp.clipchamp</c>
+		<c>f46d4000-fd22-4db4-ac8e-4e1ddde828fe 'Caixa de diálogo Adicionar Sugestões de Pasta'</c>
+		<c>internetexplorer32 'Internet Explorer - 32 bits'</c>
+		<c>microsoft.bingnews 'Microsoft News'</c>
+		<c>microsoft.bingsearch 'Microsoft Bing'</c>
+		<c>microsoft.bingweather 'MSN Weather'</c>
+		<c>microsoft.bioenrollment 'Configuração do Windows Hello'</c>
+		<c>microsoft.ecapp 'Controle com os Olhos'</c>
+		<c>microsoft.gamingapp 'App Xbox'</c>
+		<c>microsoft.gethelp 'Get Help'</c>
+		<c>microsoft.microsoftofficehub 'Microsoft 365 Copilot'</c>
+		<c>microsoft.microsoftsolitairecollection 'Solitaire &amp; Casual Games'</c>
+		<c>microsoft.microsoftstickynotes 'Microsoft Sticky Notes'</c>
+		<c>microsoft.outlookforwindows 'Outlook for Windows'</c>
+		<c>microsoft.paint 'Paint'</c>
+		<c>microsoft.sechealthui 'Windows Defender'</c>
+		<c>microsoft.todos 'Microsoft To Do'</c>
+		<c>microsoft.windows.narratorquickstart 'Narrador'</c>
+		<c>microsoft.windows.parentalcontrols 'Microsoft Family Safety'</c>
+		<c>microsoft.windows.photos 'Microsoft Photos'</c>
+		<c>microsoft.windows.secureassessmentbrowser 'Fazer um Teste'</c>
+		<c>microsoft.windowscamera 'Windows Camera'</c>
+		<c>microsoft.windowsfeedbackhub 'Feedback Hub'</c>
+		<c>microsoft.windowsnotepad 'Windows Notepad'</c>
+		<c>microsoft.windowssoundrecorder 'Windows Sound Recorder'</c>
+		<c>microsoft.xbox.tcui 'Xbox TCUI'</c>
+		<c>microsoft.xboxgamecallableui 'Xbox Game UI'</c>
+		<c>microsoft.xboxgamingoverlay 'Game Bar'</c>
+		<c>microsoft.xboxidentityprovider 'Xbox Identity Provider'</c>
+		<c>microsoft.xboxspeechtotextoverlay 'Game Speech Window'</c>
+		<c>microsoft.yourphone 'Phone Link'</c>
+		<c>microsoft.zunemusic 'Windows Media Player'</c>
+		<c>microsoftcorporationii.quickassist 'Quick Assist'</c>
+		<c>msteams 'Microsoft Teams'</c>
+		<c>multipointconnector 'Conector Multiponto'</c>
+		<c>remoteassistance 'Assistência Remota'</c>
+		<c>xbox 'Xbox - Núcleo'</c>
+	</RemoveComponents>
+	<RemoveComponents AppRemovalMode="DISM" date="03/07/2026 02:16:49">
+		<c>internetexplorer32 'Internet Explorer - 32 bits'</c>
+		<c>microsoft.bioenrollment 'Configuração do Windows Hello'</c>
+		<c>microsoft.sechealthui 'Windows Defender'</c>
+		<c>microsoft.windows.parentalcontrols 'Microsoft Family Safety'</c>
+		<c>xbox 'Xbox - Núcleo'</c>
+	</RemoveComponents>
+	<RemoveComponents AppRemovalMode="DISM" date="03/07/2026 01:22:30">
+		<c>1527c705-839a-4832-9118-54d4bd6a0c89 'File Picker'</c>
+		<c>f46d4000-fd22-4db4-ac8e-4e1ddde828fe 'Caixa de diálogo Adicionar Sugestões de Pasta'</c>
+		<c>microsoft.ecapp 'Controle com os Olhos'</c>
+		<c>microsoft.windows.narratorquickstart 'Narrador'</c>
+		<c>microsoft.windows.secureassessmentbrowser 'Fazer um Teste'</c>
+	</RemoveComponents>
+	<Compatibility>
+		<ComponentFeatures>
+			<Feature enabled="yes">Activation</Feature>
+			<Feature enabled="no">Battle.net</Feature>
+			<Feature enabled="no">YubiKey</Feature>
+			<Feature enabled="no">Bluetooth</Feature>
+			<Feature enabled="no">CapFrameX</Feature>
+			<Feature enabled="no">USBCamera</Feature>
+			<Feature enabled="no">VSS</Feature>
+			<Feature enabled="no">NetworkDiscovery</Feature>
+			<Feature enabled="no">Discord</Feature>
+			<Feature enabled="no">Recommended-Tablet</Feature>
+			<Feature enabled="no">Docker</Feature>
+			<Feature enabled="no">EAC</Feature>
+			<Feature enabled="no">HostRefresh</Feature>
+			<Feature enabled="no">SnippingTool</Feature>
+			<Feature enabled="no">DefaultFonts</Feature>
+			<Feature enabled="no">AppGuard</Feature>
+			<Feature enabled="no">Hyper-V</Feature>
+			<Feature enabled="no">iCloud</Feature>
+			<Feature enabled="no">WinSetup</Feature>
+			<Feature enabled="no">Printing</Feature>
+			<Feature enabled="no">LegacyGames</Feature>
+			<Feature enabled="no">Kaspersky</Feature>
+			<Feature enabled="no">WindowsStore</Feature>
+			<Feature enabled="no">NightLight</Feature>
+			<Feature enabled="no">OfficeSupport</Feature>
+			<Feature enabled="no">USBModem</Feature>
+			<Feature enabled="no">Netflix</Feature>
+			<Feature enabled="no">NvidiaSetup</Feature>
+			<Feature enabled="no">OneNote</Feature>
+			<Feature enabled="no">OOBE</Feature>
+			<Feature enabled="no">ShellSearchSupport</Feature>
+			<Feature enabled="yes">ServicingStack</Feature>
+			<Feature enabled="no">PITR</Feature>
+			<Feature enabled="no">Recommended-All</Feature>
+			<Feature enabled="no">SafeMode</Feature>
+			<Feature enabled="no">VideoPlayback</Feature>
+			<Feature enabled="no">SamsungSwitch</Feature>
+			<Feature enabled="no">Scanning</Feature>
+			<Feature enabled="no">Spotify</Feature>
+			<Feature enabled="no">AppxSupport</Feature>
+			<Feature enabled="no">FileSharing</Feature>
+			<Feature enabled="no">VPN</Feature>
+			<Feature enabled="no">TeamViewer</Feature>
+			<Feature enabled="yes">USB</Feature>
+			<Feature enabled="yes">SFC</Feature>
+			<Feature enabled="no">VisualStudio</Feature>
+			<Feature enabled="no">WFC</Feature>
+			<Feature enabled="no">WindowsUpdate</Feature>
+			<Feature enabled="no">WLAN</Feature>
+			<Feature enabled="no">RDPServer</Feature>
+		</ComponentFeatures>
+		<MachineDrivers>
+			<Machine enabled="no">Hyper-V VM</Machine>
+			<Machine enabled="no">HostMachine</Machine>
+			<Machine enabled="no">Parallels VM</Machine>
+			<Machine enabled="no">Virtual Box VM</Machine>
+			<Machine enabled="no">VMware VM</Machine>
+		</MachineDrivers>
+	</Compatibility>
+	<Compatibility date="03/07/2026 02:16:49">
+		<ComponentFeatures>
+			<Feature enabled="yes">Activation</Feature>
+			<Feature enabled="yes">Battle.net</Feature>
+			<Feature enabled="no">YubiKey</Feature>
+			<Feature enabled="no">Bluetooth</Feature>
+			<Feature enabled="no">CapFrameX</Feature>
+			<Feature enabled="yes">USBCamera</Feature>
+			<Feature enabled="no">VSS</Feature>
+			<Feature enabled="no">NetworkDiscovery</Feature>
+			<Feature enabled="yes">Discord</Feature>
+			<Feature enabled="no">Recommended-Tablet</Feature>
+			<Feature enabled="no">Docker</Feature>
+			<Feature enabled="yes">EAC</Feature>
+			<Feature enabled="yes">HostRefresh</Feature>
+			<Feature enabled="yes">DefaultFonts</Feature>
+			<Feature enabled="no">AppGuard</Feature>
+			<Feature enabled="no">Hyper-V</Feature>
+			<Feature enabled="no">iCloud</Feature>
+			<Feature enabled="yes">WinSetup</Feature>
+			<Feature enabled="yes">Printing</Feature>
+			<Feature enabled="yes">LegacyGames</Feature>
+			<Feature enabled="no">Kaspersky</Feature>
+			<Feature enabled="yes">WindowsStore</Feature>
+			<Feature enabled="yes">NightLight</Feature>
+			<Feature enabled="yes">OfficeSupport</Feature>
+			<Feature enabled="no">USBModem</Feature>
+			<Feature enabled="yes">Netflix</Feature>
+			<Feature enabled="yes">NvidiaSetup</Feature>
+			<Feature enabled="no">OneNote</Feature>
+			<Feature enabled="yes">OOBE</Feature>
+			<Feature enabled="yes">ShellSearchSupport</Feature>
+			<Feature enabled="yes">ServicingStack</Feature>
+			<Feature enabled="no">PITR</Feature>
+			<Feature enabled="yes">Recommended-All</Feature>
+			<Feature enabled="no">SafeMode</Feature>
+			<Feature enabled="yes">VideoPlayback</Feature>
+			<Feature enabled="no">SamsungSwitch</Feature>
+			<Feature enabled="yes">Scanning</Feature>
+			<Feature enabled="yes">Spotify</Feature>
+			<Feature enabled="yes">AppxSupport</Feature>
+			<Feature enabled="yes">FileSharing</Feature>
+			<Feature enabled="no">VPN</Feature>
+			<Feature enabled="yes">TeamViewer</Feature>
+			<Feature enabled="yes">USB</Feature>
+			<Feature enabled="yes">SFC</Feature>
+			<Feature enabled="yes">VisualStudio</Feature>
+			<Feature enabled="no">WFC</Feature>
+			<Feature enabled="yes">WindowsUpdate</Feature>
+			<Feature enabled="yes">WLAN</Feature>
+			<Feature enabled="no">RDPServer</Feature>
+		</ComponentFeatures>
+		<MachineDrivers>
+			<Machine enabled="no">Hyper-V VM</Machine>
+			<Machine enabled="yes">HostMachine</Machine>
+			<Machine enabled="no">Parallels VM</Machine>
+			<Machine enabled="no">Virtual Box VM</Machine>
+			<Machine enabled="no">VMware VM</Machine>
+		</MachineDrivers>
+	</Compatibility>
+	<Compatibility date="03/07/2026 01:22:30">
+		<ComponentFeatures>
+			<Feature enabled="no">Activation</Feature>
+			<Feature enabled="no">Battle.net</Feature>
+			<Feature enabled="no">YubiKey</Feature>
+			<Feature enabled="no">Bluetooth</Feature>
+			<Feature enabled="no">CapFrameX</Feature>
+			<Feature enabled="no">USBCamera</Feature>
+			<Feature enabled="no">VSS</Feature>
+			<Feature enabled="no">NetworkDiscovery</Feature>
+			<Feature enabled="no">Discord</Feature>
+			<Feature enabled="no">Recommended-Tablet</Feature>
+			<Feature enabled="no">Docker</Feature>
+			<Feature enabled="no">EAC</Feature>
+			<Feature enabled="no">HostRefresh</Feature>
+			<Feature enabled="no">DefaultFonts</Feature>
+			<Feature enabled="no">AppGuard</Feature>
+			<Feature enabled="no">Hyper-V</Feature>
+			<Feature enabled="no">iCloud</Feature>
+			<Feature enabled="no">WinSetup</Feature>
+			<Feature enabled="no">Printing</Feature>
+			<Feature enabled="no">LegacyGames</Feature>
+			<Feature enabled="no">Kaspersky</Feature>
+			<Feature enabled="no">WindowsStore</Feature>
+			<Feature enabled="no">NightLight</Feature>
+			<Feature enabled="no">OfficeSupport</Feature>
+			<Feature enabled="no">USBModem</Feature>
+			<Feature enabled="no">Netflix</Feature>
+			<Feature enabled="no">NvidiaSetup</Feature>
+			<Feature enabled="no">OneNote</Feature>
+			<Feature enabled="no">OOBE</Feature>
+			<Feature enabled="no">ShellSearchSupport</Feature>
+			<Feature enabled="no">ServicingStack</Feature>
+			<Feature enabled="no">PITR</Feature>
+			<Feature enabled="no">Recommended-All</Feature>
+			<Feature enabled="no">SafeMode</Feature>
+			<Feature enabled="no">VideoPlayback</Feature>
+			<Feature enabled="no">SamsungSwitch</Feature>
+			<Feature enabled="no">Scanning</Feature>
+			<Feature enabled="no">Spotify</Feature>
+			<Feature enabled="no">AppxSupport</Feature>
+			<Feature enabled="no">FileSharing</Feature>
+			<Feature enabled="no">VPN</Feature>
+			<Feature enabled="no">TeamViewer</Feature>
+			<Feature enabled="no">USB</Feature>
+			<Feature enabled="no">SFC</Feature>
+			<Feature enabled="no">VisualStudio</Feature>
+			<Feature enabled="no">WFC</Feature>
+			<Feature enabled="no">WindowsUpdate</Feature>
+			<Feature enabled="no">WLAN</Feature>
+			<Feature enabled="no">RDPServer</Feature>
+		</ComponentFeatures>
+		<MachineDrivers>
+			<Machine enabled="no">Hyper-V VM</Machine>
+			<Machine enabled="no">HostMachine</Machine>
+			<Machine enabled="no">Parallels VM</Machine>
+			<Machine enabled="no">Virtual Box VM</Machine>
+			<Machine enabled="no">VMware VM</Machine>
+		</MachineDrivers>
+	</Compatibility>
+	<Tweaks>
+		<Settings>
+			<TweakGroup name="TaskbarTweaks">
+				<Tweak name="Advanced\TaskbarMn">0</Tweak>
+			</TweakGroup>
+			<TweakGroup name="Privacy">
+				<Tweak name="ContentDeliveryManager\OemPreInstalledAppsEnabled">0</Tweak>
+				<Tweak name="ContentDeliveryManager\PreInstalledAppsEnabled">0</Tweak>
+				<Tweak name="AppHost\EnableWebContentEvaluation">0</Tweak>
+				<Tweak name="ContentDeliveryManager\SilentInstalledAppsEnabled">0</Tweak>
+				<Tweak name="TrainedDataStore\HarvestContacts">0</Tweak>
+				<Tweak name="AppCompat\DisableInventory">1</Tweak>
+				<Tweak name="InputPersonalization\RestrictImplicitTextCollection">1</Tweak>
+				<Tweak name="InputPersonalization\RestrictImplicitInkCollection">1</Tweak>
+				<Tweak name="TIPC\Enabled">0</Tweak>
+				<Tweak name="Rules\NumberOfSIUFInPeriod">0</Tweak>
+				<Tweak name="CloudContent\DisableWindowsConsumerFeatures">1</Tweak>
+				<Tweak name="System\AllowExperimentation">0</Tweak>
+				<Tweak name="Privacy\TailoredExperiencesWithDiagnosticDataEnabled">0</Tweak>
+				<Tweak name="AppSettings\Skype-UserConsentAccepted">0</Tweak>
+				<Tweak name="System\EnableActivityFeed">0</Tweak>
+				<Tweak name="DataCollection\AllowTelemetry">0</Tweak>
+				<Tweak name="Settings\AcceptedPrivacyPolicy">0</Tweak>
+				<Tweak name="Explorer\SmartScreenEnabled">Off</Tweak>
+				<Tweak name="MicrosoftEdge\PhishingFilter\Enabledv9">0</Tweak>
+				<Tweak name="Internet Explorer\PhishingFilter\Enabledv9">0</Tweak>
+				<Tweak name="CloudContent\DisableWindowsSpotlightFeatures">1</Tweak>
+			</TweakGroup>
+			<TweakGroup name="System">
+				<Tweak name="LabConfig\BypassRAMCheck">1</Tweak>
+				<Tweak name="LabConfig\BypassTPMCheck">1</Tweak>
+			</TweakGroup>
+			<TweakGroup name="WindowsDefender">
+				<Tweak name="State\AccountProtection_MicrosoftAccount_Disconnected">0</Tweak>
+				<Tweak name="Notifications\DisableEnhancedNotifications">1</Tweak>
+				<Tweak name="Notifications\DisableNotifications">1</Tweak>
+				<Tweak name="Policy\VerifiedAndReputablePolicyState">0</Tweak>
+				<Tweak name="Features\TamperProtection">0</Tweak>
+				<Tweak name="Windows Defender\DisableAntiSpyware">1</Tweak>
+			</TweakGroup>
+			<TweakGroup name="WindowsUpdate">
+				<Tweak name="Settings\IsExpedited">0</Tweak>
+			</TweakGroup>
+			<TweakGroup name="DesktopTweaks">
+				<Tweak name="Communications\ConfigureChatAutoInstall">0</Tweak>
+			</TweakGroup>
+		</Settings>
+	</Tweaks>
+	<ApplyOptions>
+		<ImageTasks>
+			<Task>imageSaveRebuild</Task>
+			<Task>imageFormatEsd</Task>
+			<Task exclusiveOnly="true">tweaksettings_boot.wim_02_2_64</Task>
+			<Task>imageOptionsCreateIso</Task>
+		</ImageTasks>
+		<AutoIsoFile>C:\Users\adney\Downloads\W11 +Comp.iso</AutoIsoFile>
+		<AutoIsoLabel>W11+Comp</AutoIsoLabel>
+	</ApplyOptions>
+	<ApplyOptions date="03/07/2026 02:16:49">
+		<ImageTasks>
+			<Task>imageSaveTrim</Task>
+			<Task>imageFormatEsd</Task>
+			<Task>imageOptionsCreateIso</Task>
+		</ImageTasks>
+		<AutoIsoFile>C:\Users\adney\Downloads\W11 SL2.iso</AutoIsoFile>
+		<AutoIsoLabel>Super Lite W11 2</AutoIsoLabel>
+	</ApplyOptions>
+	<ApplyOptions date="03/07/2026 01:22:30">
+		<ImageTasks>
+			<Task>imageSaveRebuild</Task>
+			<Task>imageFormatEsd</Task>
+			<Task>imageOptionsCreateIso</Task>
+		</ImageTasks>
+		<AutoIsoFile>C:\Users\adney\Downloads\W11 Compaq.iso</AutoIsoFile>
+		<AutoIsoLabel>W11 Compaq</AutoIsoLabel>
+	</ApplyOptions>
+	<Unattended mode="1" date="03/07/2026 02:16:49">
+		<settings pass="oobeSystem">
+			<component name="Microsoft-Windows-Deployment">
+				<Reseal>
+					<Mode>OOBE</Mode>
+				</Reseal>
+			</component>
+			<component name="Microsoft-Windows-International-Core">
+				<InputLocale>0416:00010416</InputLocale>
+				<SystemLocale>pt-BR</SystemLocale>
+				<UILanguage>pt-BR</UILanguage>
+				<UILanguageFallback>pt-BR</UILanguageFallback>
+				<UserLocale>pt-BR</UserLocale>
+			</component>
+			<component name="Microsoft-Windows-Shell-Setup">
+				<TimeZone>Hora oficial do Brasil</TimeZone>
+				<FolderLocations>
+					<ProfilesDirectory>Pichau</ProfilesDirectory>
+				</FolderLocations>
+				<OOBE>
+					<HideEULAPage>true</HideEULAPage>
+					<HideLocalAccountScreen>true</HideLocalAccountScreen>
+					<HideOnlineAccountScreens>true</HideOnlineAccountScreens>
+					<HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
+					<NetworkLocation>Other</NetworkLocation>
+					<ProtectYourPC>3</ProtectYourPC>
+					<SkipMachineOOBE>true</SkipMachineOOBE>
+					<SkipUserOOBE>true</SkipUserOOBE>
+				</OOBE>
+			</component>
+		</settings>
+		<settings pass="specialize">
+			<component name="Microsoft-Windows-Security-SPP-UX">
+				<SkipAutoActivation>true</SkipAutoActivation>
+			</component>
+			<component name="Microsoft-Windows-Shell-Setup">
+				<ComputerName>Pichau</ComputerName>
+			</component>
+		</settings>
+		<settings pass="windowsPE">
+			<component name="Microsoft-Windows-International-Core-WinPE">
+				<InputLocale>0416:00010416</InputLocale>
+				<SystemLocale>pt-BR</SystemLocale>
+				<UILanguage>pt-BR</UILanguage>
+				<UILanguageFallback>pt-BR</UILanguageFallback>
+				<UserLocale>pt-BR</UserLocale>
+				<SetupUILanguage>
+					<UILanguage>pt-BR</UILanguage>
+				</SetupUILanguage>
+			</component>
+			<component name="Microsoft-Windows-Setup">
+				<Diagnostics>
+					<OptIn>false</OptIn>
+				</Diagnostics>
+				<DynamicUpdate>
+					<Enable>false</Enable>
+					<WillShowUI>OnError</WillShowUI>
+				</DynamicUpdate>
+				<ImageInstall>
+					<OSImage>
+						<Compact>true</Compact>
+					</OSImage>
+				</ImageInstall>
+				<UserData>
+					<AcceptEula>true</AcceptEula>
+					<FullName>Pichau</FullName>
+					<ProductKey>
+						<WillShowUI>OnError</WillShowUI>
+					</ProductKey>
+				</UserData>
+			</component>
+		</settings>
+	</Unattended>
+</Preset>

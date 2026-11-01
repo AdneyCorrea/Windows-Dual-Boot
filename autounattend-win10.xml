@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
+<<<<<<< HEAD
+=======
+<!-- Respostas automaticas aplicadas depois da imagem do Windows.
+     Namespaces e fases pertencem ao formato do Windows Setup. -->
+>>>>>>> origin/master
 <unattend xmlns="urn:schemas-microsoft-com:unattend"
           xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State"
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
+<<<<<<< HEAD
+=======
+  <!-- Identidade do computador e fuso horario na fase de especializacao. -->
+>>>>>>> origin/master
   <settings pass="specialize">
     <component name="Microsoft-Windows-Shell-Setup"
                processorArchitecture="amd64"
@@ -14,6 +23,7 @@
       <RegisteredOwner>Pichau</RegisteredOwner>
       <RegisteredOrganization>Pichau</RegisteredOrganization>
     </component>
+<<<<<<< HEAD
 
     <component name="Microsoft-Windows-Deployment"
                processorArchitecture="amd64"
@@ -37,12 +47,21 @@
     </component>
   </settings>
 
+=======
+  </settings>
+
+  <!-- Primeiro uso: idioma, conta local e entrada automatica. -->
+>>>>>>> origin/master
   <settings pass="oobeSystem">
     <component name="Microsoft-Windows-International-Core"
                processorArchitecture="amd64"
                publicKeyToken="31bf3856ad364e35"
                language="neutral"
                versionScope="nonSxS">
+<<<<<<< HEAD
+=======
+      <!-- Teclado e localidades em portugues do Brasil. -->
+>>>>>>> origin/master
       <InputLocale>0416:00010416</InputLocale>
       <SystemLocale>pt-BR</SystemLocale>
       <UILanguage>pt-BR</UILanguage>
@@ -54,16 +73,28 @@
                publicKeyToken="31bf3856ad364e35"
                language="neutral"
                versionScope="nonSxS">
+<<<<<<< HEAD
 
+=======
+      <!-- Telas omitidas na experiencia inicial e opcoes de protecao. -->
+>>>>>>> origin/master
       <OOBE>
         <HideEULAPage>true</HideEULAPage>
         <HideOnlineAccountScreens>true</HideOnlineAccountScreens>
         <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
         <HideOEMRegistrationScreen>true</HideOEMRegistrationScreen>
+<<<<<<< HEAD
         <NetworkLocation>Work</NetworkLocation>
         <ProtectYourPC>3</ProtectYourPC>
       </OOBE>
 
+=======
+        <NetworkLocation>Other</NetworkLocation>
+        <ProtectYourPC>3</ProtectYourPC>
+      </OOBE>
+
+      <!-- Conta local administrativa com os valores definidos abaixo. -->
+>>>>>>> origin/master
       <UserAccounts>
         <LocalAccounts>
           <LocalAccount wcm:action="add">
@@ -79,15 +110,33 @@
         </LocalAccounts>
       </UserAccounts>
 
+<<<<<<< HEAD
       <AutoLogon>
         <Enabled>true</Enabled>
         <Username>Pichau</Username>
         <LogonCount>999</LogonCount>
+=======
+      <!-- Unico gatilho automatico: drivers e pos-processamento no primeiro logon. -->
+      <FirstLogonCommands>
+        <SynchronousCommand wcm:action="add">
+          <Order>1</Order>
+          <Description>Executar Atualizar Drivers uma unica vez</Description>
+          <CommandLine>powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "%WINDIR%\Setup\Scripts\Iniciar-PrimeiroLogon.ps1"</CommandLine>
+        </SynchronousCommand>
+      </FirstLogonCommands>
+
+      <!-- Dois logons automaticos para concluir a preparacao do computador. -->
+      <AutoLogon>
+        <Enabled>true</Enabled>
+        <Username>Pichau</Username>
+        <LogonCount>2</LogonCount>
+>>>>>>> origin/master
         <Password>
           <Value></Value>
           <PlainText>true</PlainText>
         </Password>
       </AutoLogon>
+<<<<<<< HEAD
 
       <FirstLogonCommands>
         <SynchronousCommand wcm:action="add">
@@ -101,3 +150,9 @@
   </settings>
 
 </unattend>
+=======
+    </component>
+  </settings>
+
+</unattend>
+>>>>>>> origin/master
