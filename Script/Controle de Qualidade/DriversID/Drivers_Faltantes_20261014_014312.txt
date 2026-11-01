@@ -1,0 +1,10 @@
+﻿========================================================================
+Dispositivo: Controlador de rede
+Categoria: Outros dispositivos
+Instance ID: PCI\VEN_14C3&DEV_7902&SUBSYS_60401A3B&REV_00\6&769BCDD&0&00580011
+Hardware IDs:
+PCI\VEN_14C3&DEV_7902&SUBSYS_60401A3B&REV_00
+PCI\VEN_14C3&DEV_7902&SUBSYS_60401A3B
+PCI\VEN_14C3&DEV_7902&CC_028000
+PCI\VEN_14C3&DEV_7902&CC_0280
+
