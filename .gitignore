@@ -1,11 +1,4 @@
-<<<<<<< HEAD
-sources/
+# Imagens de instalacao e de midia (fornecidas separadamente)
 *.wim
 *.esd
 *.iso
-=======
-# Imagens grandes da midia de instalacao (fornecidas separadamente)
-/Win10/sources/install.esd
-/Win11/sources/install.esd
-/sources/boot.wim
->>>>>>> origin/master
